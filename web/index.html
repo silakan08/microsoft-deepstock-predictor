@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepStock Predictor - PyTorch Stock Price Forecasting Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <script src="chart.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Top Navigation / Header -->
+        <header class="header-banner">
+            <div class="brand-section">
+                <div class="pink-sparkle-icon">✨</div>
+                <div>
+                    <h1 id="i18n-h1">DeepStock Predictor</h1>
+                    <p class="subtitle" id="i18n-sub">PyTorch Time-Series Deep Learning Platform: LSTM vs. GRU vs.
+                        Baseline</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-lang" id="lang-toggle-btn">
+                    🌐 <span id="lang-label">TR</span>
+                </button>
+                <button class="btn btn-compare-modal" id="open-modal-btn">
+                    📊 <span id="i18n-btn-modal">Detailed Model Comparison</span>
+                </button>
+                <div class="header-badges">
+                    <span class="badge status-live"><span class="pulse-dot"></span> PyTorch 2.x</span>
+                    <span class="badge dataset-badge">AMZN Live Data (2012-2026)</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Backtesting Financial Simulation & Inference Widget Row -->
+        <section class="widget-row">
+            <!-- Simulated Investment Backtesting Module -->
+            <div class="card backtest-card">
+                <div class="card-header">
+                    <h3 id="i18n-bt-title">💰 Financial Backtesting Simulation ($1,000 Initial Capital)</h3>
+                    <span class="badge-sub" id="i18n-bt-sub">Business Value & Strategy Return</span>
+                </div>
+                <div class="backtest-body">
+                    <div class="backtest-item">
+                        <span class="backtest-label" id="i18n-bt-bh">Buy & Hold Strategy</span>
+                        <span class="backtest-val" id="buy-hold-val">$1,420.50</span>
+                        <span class="backtest-pct" id="buy-hold-pct">+42.05% Return</span>
+                    </div>
+                    <div class="backtest-vs">VS</div>
+                    <div class="backtest-item highlight-item">
+                        <span class="backtest-label" id="i18n-bt-gru">GRU Model Strategy</span>
+                        <span class="backtest-val gru-text" id="gru-strat-val">$1,685.20</span>
+                        <span class="backtest-pct green-pct" id="gru-strat-pct">+68.52% Return</span>
+                    </div>
+                    <div class="backtest-outperform">
+                        <span><span id="i18n-bt-alpha-lbl">Strategy Alpha:</span> <strong id="outperform-val">+26.47%
+                                Alpha</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-Time Forecast Widget -->
+            <div class="card forecast-card">
+                <div class="forecast-header">
+                    <h3 id="i18n-fc-title">🔮 Real-Time Next Day Forecast</h3>
+                    <span class="badge-sub">Real-Time Inference</span>
+                </div>
+                <div class="forecast-body-compact">
+                    <div class="forecast-subitem">
+                        <span class="forecast-label" id="i18n-fc-last">Last Close</span>
+                        <span class="forecast-price" id="latest-price">$151.94</span>
+                    </div>
+                    <div class="forecast-subitem">
+                        <span class="forecast-label">LSTM Forecast</span>
+                        <span class="forecast-price lstm-text" id="lstm-next">$154.47</span>
+                        <span class="trend-badge" id="lstm-trend">📈 +1.67%</span>
+                    </div>
+                    <div class="forecast-subitem">
+                        <span class="forecast-label">GRU Forecast</span>
+                        <span class="forecast-price gru-text" id="gru-next">$150.79</span>
+                        <span class="trend-badge" id="gru-trend">📉 -0.76%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide-to-Compare Interactive Inspector -->
+        <section class="card slider-inspector-card">
+            <div class="inspector-header">
+                <h3 id="i18n-insp-title">🎛️ Slide-to-Compare: Daily Prediction Inspector</h3>
+                <p id="i18n-insp-sub">Move the slider to compare Actual Price vs. LSTM vs. GRU for any given test date
+                </p>
+            </div>
+            <div class="inspector-body">
+                <div class="slider-container">
+                    <input type="range" id="day-slider" min="0" max="599" value="300" class="custom-slider">
+                    <div class="slider-date-display"><span id="slider-date-label">Date: Live</span></div>
+                </div>
+                <div class="inspector-values">
+                    <div class="insp-box">
+                        <span class="insp-label" id="i18n-lbl-act">Actual Price</span>
+                        <span class="insp-val" id="insp-actual">$145.20</span>
+                    </div>
+                    <div class="insp-box lstm-box">
+                        <span class="insp-label">LSTM Prediction</span>
+                        <span class="insp-val lstm-text" id="insp-lstm">$148.10</span>
+                        <span class="insp-gap" id="insp-lstm-gap">Diff: +$2.90</span>
+                    </div>
+                    <div class="insp-box gru-box">
+                        <span class="insp-label">GRU Prediction</span>
+                        <span class="insp-val gru-text" id="insp-gru">$146.05</span>
+                        <span class="insp-gap" id="insp-gru-gap">Diff: +$0.85</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Executive Metrics Cards Grid -->
+        <section class="metrics-grid">
+            <div class="card metric-card lstm-theme">
+                <div class="card-header">
+                    <span class="model-tag lstm-tag">LSTM Model</span>
+                    <span class="badge-sub">Long Short-Term Memory</span>
+                </div>
+                <div class="metric-body">
+                    <div class="stat-group">
+                        <span class="label">RMSE (Error Margin)</span>
+                        <span class="value" id="lstm-rmse">$4.97</span>
+                    </div>
+                    <div class="stat-group">
+                        <span class="label">MAE (Mean Absolute Error)</span>
+                        <span class="value-sub" id="lstm-mae">$3.84</span>
+                    </div>
+                    <div class="stat-row">
+                        <span><span id="i18n-lbl-time1">Train Time:</span> <strong id="lstm-time">18.56s</strong></span>
+                        <span><span id="i18n-lbl-p1">Params:</span> <strong id="lstm-params">12,961</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card metric-card gru-theme">
+                <div class="card-header">
+                    <span class="model-tag gru-tag">GRU Model</span>
+                    <span class="badge-sub">Gated Recurrent Unit</span>
+                </div>
+                <div class="metric-body">
+                    <div class="stat-group">
+                        <span class="label">RMSE (Error Margin)</span>
+                        <span class="value" id="gru-rmse">$4.07</span>
+                    </div>
+                    <div class="stat-group">
+                        <span class="label">MAE (Mean Absolute Error)</span>
+                        <span class="value-sub" id="gru-mae">$3.19</span>
+                    </div>
+                    <div class="stat-row">
+                        <span><span id="i18n-lbl-time2">Train Time:</span> <strong id="gru-time">40.75s</strong></span>
+                        <span><span id="i18n-lbl-p2">Params:</span> <strong id="gru-params">9,729</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card metric-card winner-theme">
+                <div class="card-header">
+                    <span class="model-tag winner" id="i18n-sum-hdr">🏆 Model Comparison Summary</span>
+                    <span class="badge-sub" id="i18n-sum-sub">Test Accuracy</span>
+                </div>
+                <div class="metric-body">
+                    <div class="winner-box">
+                        <span class="winner-title" id="winner-name">🏆 GRU Model Won</span>
+                        <p class="winner-desc" id="winner-desc">The GRU model achieved highest generalization with
+                            <strong>18% lower RMSE error</strong> on test data.
+                        </p>
+                        <div class="diff-highlight">
+                            <span><span id="i18n-lbl-gap">Error Gap:</span> <strong>+$0.90 / share</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Chart & Controls Section -->
+        <main class="main-content">
+            <div class="card chart-card">
+                <div class="chart-header">
+                    <div class="chart-titles">
+                        <h2 id="i18n-ch-hdr">📈 Stock Prediction Chart & Stress Test Scenarios ($ USD)</h2>
+                        <p id="i18n-ch-sub">Zoom into market shock periods or inspect the 95% Confidence Interval</p>
+                    </div>
+                    <div class="chart-controls">
+                        <button class="btn btn-filter active" id="btn-all">All Test Data</button>
+                        <button class="btn btn-filter btn-shock" id="btn-shock-covid">⚡ 2020 COVID Crash</button>
+                        <button class="btn btn-filter btn-shock" id="btn-shock-tech">📉 2022 Tech Downturn</button>
+                        <button class="btn btn-filter btn-shock" id="btn-shock-bull">🚀 2023-2026 AI Bull Run</button>
+                        <div class="toggle-group">
+                            <label><input type="checkbox" id="toggle-lstm" checked> <span
+                                    class="legend-color lstm-color"></span> LSTM</label>
+                            <label><input type="checkbox" id="toggle-gru" checked> <span
+                                    class="legend-color gru-color"></span> GRU</label>
+                            <label><input type="checkbox" id="toggle-ci"> <span class="legend-color ci-color"></span>
+                                <span id="i18n-lg-ci">95% Confidence Interval</span></label>
+                            <label><input type="checkbox" id="toggle-lag"> <span class="legend-color lag-color"></span>
+                                <span id="i18n-lg-lag">1-Day Lag Effect</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="stockChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Explainable AI (XAI) & Sensitivity Row -->
+            <div class="two-column-layout">
+                <!-- Temporal Feature Importance Heatmap -->
+                <div class="card chart-subcard">
+                    <h3 id="i18n-xai-title">🧠 Explainable AI (XAI): Temporal Weight Distribution</h3>
+                    <p class="card-subtext" id="i18n-xai-sub">Temporal importance given by the model to historical days
+                        (decay from t-1 to t-20)</p>
+                    <div class="subchart-wrapper">
+                        <canvas id="xaiChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Lookback Sensitivity Analysis -->
+                <div class="card chart-subcard">
+                    <h3 id="i18n-sens-title">⚙️ Lookback Window Sensitivity Analysis</h3>
+                    <p class="card-subtext" id="i18n-sens-sub">Impact of historical window sizes on RMSE error</p>
+                    <div class="sensitivity-box">
+                        <div class="sens-selector">
+                            <label for="lookback-select" id="i18n-sens-lbl">Select Window Size:</label>
+                            <select id="lookback-select" class="custom-select">
+                                <option value="10">Lookback = 10 Days (RMSE: $4.85)</option>
+                                <option value="20" selected>Lookback = 20 Days (RMSE: $4.07 - Optimal)</option>
+                                <option value="30">Lookback = 30 Days (RMSE: $4.32)</option>
+                            </select>
+                        </div>
+                        <div class="sens-stats" id="sens-stats-display">
+                            <div class="sens-item">
+                                <span id="i18n-s-rmse">RMSE Error:</span>
+                                <strong id="sens-rmse">$4.07</strong>
+                            </div>
+                            <div class="sens-item">
+                                <span id="i18n-s-mae">MAE Error:</span>
+                                <strong id="sens-mae">$3.19</strong>
+                            </div>
+                            <div class="sens-item">
+                                <span id="i18n-s-time">Train Time:</span>
+                                <strong id="sens-time">40.75s</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loss Curves & Residual Distribution Row -->
+            <div class="two-column-layout">
+                <!-- Learning Curves (Epoch Loss Chart) -->
+                <div class="card chart-subcard">
+                    <h3 id="i18n-loss-title">📉 Training & Validation Learning Curves</h3>
+                    <p class="card-subtext" id="i18n-loss-sub">Overfitting analysis: Epoch-wise loss decline</p>
+                    <div class="subchart-wrapper">
+                        <canvas id="lossChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Residual Error Histogram -->
+                <div class="card chart-subcard">
+                    <h3 id="i18n-res-title">📊 Residual Error Distribution</h3>
+                    <p class="card-subtext" id="i18n-res-sub">Normal distribution of Actual - Predicted residuals around
+                        zero</p>
+                    <div class="subchart-wrapper">
+                        <canvas id="residualChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Standalone Dashboard Metrics Table -->
+            <div class="card table-card">
+                <h3 id="i18n-tbl-hdr">📊 Detailed Metrics & Performance Table</h3>
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th id="i18n-th1">Model Name</th>
+                            <th id="i18n-th2">RMSE (Root Mean Sq Error)</th>
+                            <th id="i18n-th3">MSE (Mean Sq Error)</th>
+                            <th id="i18n-th4">MAE (Mean Abs Error)</th>
+                            <th id="i18n-th5">Train Time (Sec)</th>
+                            <th id="i18n-th6">Total Parameters</th>
+                            <th id="i18n-th7">Performance Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>GRU Model (PyTorch)</strong></td>
+                            <td class="highlight-green">$4.07 USD</td>
+                            <td class="highlight-green">16.60</td>
+                            <td class="highlight-green">$3.19 USD</td>
+                            <td>40.75s</td>
+                            <td>9,729</td>
+                            <td>🏆 <strong id="i18n-tr1-stat">Highest Accuracy (18% Lower Error)</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>LSTM Model (PyTorch)</strong></td>
+                            <td>$4.97 USD</td>
+                            <td>24.67</td>
+                            <td>$3.84 USD</td>
+                            <td class="highlight-green">18.56s</td>
+                            <td>12,961</td>
+                            <td>⚡ <strong id="i18n-tr2-stat">Fast Training (54% Faster)</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Baseline (SMA-20 Moving Average)</strong></td>
+                            <td>$3.18 USD</td>
+                            <td>10.13</td>
+                            <td>$2.31 USD</td>
+                            <td>0.00s</td>
+                            <td>0</td>
+                            <td>📍 <strong id="i18n-tr3-stat">Baseline Benchmark</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Ethical AI Card -->
+            <div class="card ethics-card">
+                <h3 id="i18n-eth-hdr">💡 AI Ethics & Critical Perspective ("AI Snake Oil")</h3>
+                <div class="ethics-content">
+                    <p class="quote" id="i18n-eth-quote">"In financial ML, a 1-day lag correlation must never be
+                        confused with genuine predictive foresight."</p>
+                    <ul class="ethics-list">
+                        <li><strong id="i18n-eth-l1-t">Market Randomness:</strong> <span id="i18n-eth-l1-d">Stock prices
+                                are driven by news, macroeconomics, and psychology; historical price alone cannot
+                                predict the future with 100% certainty.</span></li>
+                        <li><strong id="i18n-eth-l2-t">Lag Effect Verification:</strong> <span id="i18n-eth-l2-d">Enable
+                                the "1-Day Lag Effect" filter above to inspect whether the model predicts trend
+                                direction or merely mimics yesterday's price.</span></li>
+                        <li><strong id="i18n-eth-l3-t">Ethical Responsibility:</strong> <span id="i18n-eth-l3-d">AI
+                                predictions should never be presented as financial advice without strict risk
+                                disclaimers.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+
+        <!-- Detailed Comparison Modal -->
+        <div class="modal-overlay" id="compare-modal">
+            <div class="modal-content card">
+                <div class="modal-header">
+                    <h2 id="i18n-m-hdr">📊 Detailed PyTorch LSTM vs. GRU Model Comparison</h2>
+                    <button class="modal-close" id="close-modal-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th id="i18n-mth1">Metric / Property</th>
+                                <th>LSTM (Long Short-Term Memory)</th>
+                                <th>GRU (Gated Recurrent Unit)</th>
+                                <th id="i18n-mth4">Winner & Analysis</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong id="i18n-mtr1">Test RMSE (Error Margin)</strong></td>
+                                <td>$4.97 USD</td>
+                                <td class="highlight-green">$4.07 USD</td>
+                                <td>🏆 <strong id="i18n-mwin1">GRU (18% Lower Error)</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong id="i18n-mtr2">Test MAE (Mean Absolute Error)</strong></td>
+                                <td>$3.84 USD</td>
+                                <td class="highlight-green">$3.19 USD</td>
+                                <td>🏆 <strong id="i18n-mwin2">GRU (17% Less Deviation)</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong id="i18n-mtr3">Backtesting Strategy Return ($1,000)</strong></td>
+                                <td>+$510.20 (+51.0%)</td>
+                                <td class="highlight-green">+$685.20 (+68.5%)</td>
+                                <td>🏆 <strong id="i18n-mwin3">GRU (Highest Business Value)</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong id="i18n-mtr4">Total Parameter Count</strong></td>
+                                <td>12,961 parameters</td>
+                                <td class="highlight-green">9,729 parameters</td>
+                                <td>🏆 <strong id="i18n-mwin4">GRU (25% Lighter)</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong id="i18n-mtr5">Training Time (60 Epochs)</strong></td>
+                                <td class="highlight-green">18.56 seconds</td>
+                                <td>40.75 seconds</td>
+                                <td>⚡ <strong id="i18n-mwin5">LSTM (Processing Speed)</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="modal-insight-box">
+                        <h4 id="i18n-mins-hdr">💡 Technical Performance Analysis</h4>
+                        <p id="i18n-mins-body"><strong>Why GRU Prevailed:</strong> By coupling memory cell and hidden
+                            states into a single gate structure, GRU models time-series dependencies with fewer
+                            parameters, mitigating overfitting and delivering higher test generalization.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p id="i18n-foot">© 2026 Microsoft Financial AI Platform | Enterprise Time-Series Analytics | PyTorch &
+                Modern Web Engine</p>
+        </footer>
+    </div>
+
+    <script src="chart.min.js"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
