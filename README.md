@@ -2,13 +2,13 @@
 
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?style=flat&logo=pytorch)
 ![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=flat&logo=python)
-![Live Dashboard](https://img.shields.io/badge/Live%20Web%20Dashboard-Active-0078D4?style=flat&logo=github)
+![Live Dashboard](https://img.shields.io/badge/Live%20Web%20Dashboard-Active-0078D4?style=flat&logo=vercel)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Status](https://img.shields.io/badge/Status-Completed-success)
 
 ---
 
-🌐 **Live Interactive Web Dashboard:** [https://silakan08.github.io/microsoft-deepstock-predictor/](https://silakan08.github.io/microsoft-deepstock-predictor/)
+🌐 **Live Interactive Web Dashboard:** [https://microsoft-deepstock-predictor-1lr4.vercel.app/](https://microsoft-deepstock-predictor-1lr4.vercel.app/)
 
 ---
 
@@ -17,7 +17,7 @@ This repository contains a production-grade Time-Series Forecasting and Deep Lea
 
 The project implements, trains, and evaluates two recurrent neural network architectures—**Long Short-Term Memory (LSTM)** and **Gated Recurrent Unit (GRU)**—using **PyTorch** to predict Amazon (`AMZN`) daily stock closing prices over a 12-year period (2012–2024).
 
-In addition to the core PyTorch ML engine and runnable Jupyter Notebook, this project includes an **[Interactive Web Dashboard](https://silakan08.github.io/microsoft-deepstock-predictor/)** for live metric comparisons and an **Ethical AI & Limitations Analysis** based on Princeton University's *"AI Snake Oil"* framework.
+In addition to the core PyTorch ML engine and runnable Jupyter Notebook, this project includes an **[Interactive Web Dashboard](https://microsoft-deepstock-predictor-1lr4.vercel.app/)** for live metric comparisons and an **Ethical AI & Limitations Analysis** based on Princeton University's *"AI Snake Oil"* framework.
 
 ---
 
